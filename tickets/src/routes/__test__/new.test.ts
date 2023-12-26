@@ -14,13 +14,13 @@ it('can only be access if a user is signed in', async () => {
 });
 
 it('returns a status other than 401 if the user is signed in', async () => {
-  const cookie = await signin();
+  const cookie = signin();
   const response = await request(app).post('/api/tickets').set('Cookie', cookie).send({});
   expect(response.status).not.toEqual(401);
 });
 
 it('returns an error if an invalid title is provided', async () => {
-  const cookie = await signin();
+  const cookie = signin();
   await request(app)
     .post('/api/tickets')
     .set('Cookie', cookie)
@@ -40,7 +40,7 @@ it('returns an error if an invalid title is provided', async () => {
 });
 
 it('returns an error if an invalid price is provided', async () => {
-  const cookie = await signin();
+  const cookie = signin();
   await request(app)
     .post('/api/tickets')
     .set('Cookie', cookie)
@@ -60,7 +60,7 @@ it('returns an error if an invalid price is provided', async () => {
 });
 
 it('creates a ticket with valid inputs', async () => {
-  const cookie = await signin();
+  const cookie = signin();
   let tickets = await Ticket.find({});
   expect(tickets.length).toEqual(0);
 

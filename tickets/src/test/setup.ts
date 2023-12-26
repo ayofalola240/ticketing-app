@@ -36,10 +36,10 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-export const signin = async (): Promise<string[]> => {
+export const signin = (): [string] => {
   // Build a JWT payload. { id, email }
   const payload = {
-    id: '183gdjeu83',
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: 'text@example.com',
   };
 
