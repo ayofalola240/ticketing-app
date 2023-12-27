@@ -2,6 +2,7 @@ import nats from 'node-nats-streaming';
 import { randomBytes } from 'crypto';
 import { TicketCreatedListener } from './events/ticket-created-listener';
 
+// kubectl port-forward nats-depl-5c58cc6bc-gbgr2 4222:4222
 console.clear();
 
 const stan = nats.connect('ticketing', randomBytes(4).toString('hex'), {
