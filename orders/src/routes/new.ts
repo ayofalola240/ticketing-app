@@ -8,8 +8,8 @@ import {
   BadRequestError,
 } from '@e-mart/common';
 import { body } from 'express-validator';
-import { Ticket } from '../../models/ticket';
-import { Order } from '../../models/order';
+import { Ticket } from '../models/ticket';
+import { Order } from '../models/order';
 
 const EXPIRATION_WINDOW_SECONDS = 15 * 60;
 
