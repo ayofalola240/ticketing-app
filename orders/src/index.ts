@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
+import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
+import { TicketUpdatedListener } from './events/listeners/ticket-updated-listerner';
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -36,6 +38,8 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
+  new TicketCreatedListener(natsWrapper.client).listen();
+  new TicketUpdatedListener(natsWrapper.client).listen();
 
   app.listen(3000, () => {
     console.log('Listening on port 3000!!!!!!!!');

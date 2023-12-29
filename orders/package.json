@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@e-mart/common": "^1.0.6",
+    "@e-mart/common": "^1.0.7",
     "@types/cookie-session": "^2.0.47",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",

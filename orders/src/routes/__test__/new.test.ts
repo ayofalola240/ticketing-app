@@ -5,6 +5,7 @@ import { signin } from '../../test/setup';
 import { Order } from '../../models/order';
 import { Ticket } from '../../models/ticket';
 import { OrderStatus } from '../../models/order';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('can only be access if a user is signed in', async () => {
   await request(app).post('/api/orders').send({}).expect(401);
@@ -64,4 +65,21 @@ it('returns a ticket', async () => {
     .expect(201);
 });
 
-it.todo('emits an order created event');
+it('emits an order created event', async () => {
+  const cookie = signin();
+  const ticket = Ticket.build({
+    title: 'Concert Ticket',
+    price: 20,
+  });
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', cookie)
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+  // expect(natsWrapper.client.publish).not.toHaveBeenCalled();
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
