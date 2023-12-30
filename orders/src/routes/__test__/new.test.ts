@@ -27,6 +27,7 @@ it('returns an error if the ticket does not exist', async () => {
 it('returns an error if the ticket is already resevered', async () => {
   const cookie = signin();
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'Concert Ticket',
     price: 20,
   });
@@ -51,6 +52,7 @@ it('returns an error if the ticket is already resevered', async () => {
 it('returns a ticket', async () => {
   const cookie = signin();
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'Concert Ticket',
     price: 20,
   });
@@ -68,6 +70,7 @@ it('returns a ticket', async () => {
 it('emits an order created event', async () => {
   const cookie = signin();
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'Concert Ticket',
     price: 20,
   });

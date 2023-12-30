@@ -3,11 +3,16 @@ import { app } from '../../app';
 import { signin } from '../../test/setup';
 import { Order } from '../../models/order';
 import { Ticket } from '../../models/ticket';
+import mongoose from 'mongoose';
 
 it('fetches the order', async () => {
   const cookie = signin();
   // Create a ticket
-  const ticket = Ticket.build({ title: 'Test Ticket', price: 20 });
+  const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'Test Ticket',
+    price: 20,
+  });
   await ticket.save();
   // Make a request to buid an order with tis ticket
   const { body: order } = await request(app)
@@ -27,7 +32,11 @@ it('fetches the order', async () => {
 it('it ruturns an error if one user tries to fetch another users order', async () => {
   const user = signin();
   // Create a ticket
-  const ticket = Ticket.build({ title: 'Test Ticket', price: 20 });
+  const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'Test Ticket',
+    price: 20,
+  });
   await ticket.save();
   // Make a request to buid an order with tis ticket
   const { body: order } = await request(app)
