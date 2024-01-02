@@ -1,4 +1,10 @@
-import { NotFoundError, validateRequest, requireAuth, NotAuthorizedError } from '@e-mart/common';
+import {
+  NotFoundError,
+  validateRequest,
+  requireAuth,
+  NotAuthorizedError,
+  BadRequestError,
+} from '@e-mart/common';
 import express, { Request, Response } from 'express';
 import { Ticket } from '../models/tickets';
 import { body } from 'express-validator';
@@ -24,6 +30,10 @@ router.put(
 
     if (ticket.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
+    }
+
+    if (ticket.orderId) {
+      throw new BadRequestError('Cannot edit a resvered ticket');
     }
 
     ticket.set({
