@@ -32,6 +32,14 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+    - image: ayofalola240/expiration
+      context: expiration
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
   local:
     push: false
 manifests:
