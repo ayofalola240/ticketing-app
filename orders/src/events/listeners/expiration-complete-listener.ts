@@ -14,27 +14,26 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
     if (!order) {
       //   throw new Error('Order not found');
       console.log(`Order not found`);
-      return;
+    } else {
+      if (order.status === OrderStatus.Complete) {
+        return msg.ack();
+      }
+
+      order.set({
+        status: OrderStatus.Cancelled,
+      });
+
+      await order.save();
+
+      await new OrderCancelledPublisher(this.client).publish({
+        id: order.id,
+        version: order.version,
+        ticket: {
+          id: order.ticket.id,
+        },
+      });
+
+      msg.ack();
     }
-
-    if (order.status === OrderStatus.Complete) {
-      return msg.ack();
-    }
-
-    order.set({
-      status: OrderStatus.Cancelled,
-    });
-
-    await order.save();
-
-    await new OrderCancelledPublisher(this.client).publish({
-      id: order.id,
-      version: order.version,
-      ticket: {
-        id: order.ticket.id,
-      },
-    });
-
-    msg.ack();
   }
 }
