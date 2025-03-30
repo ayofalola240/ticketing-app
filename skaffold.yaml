@@ -1,21 +1,34 @@
+# ==============================================
+# Skaffold Configuration File (v4beta7)
+# ==============================================
 apiVersion: skaffold/v4beta7
 kind: Config
+
+# ==============
+# Build Section
+# ==============
 build:
+  # List of all artifacts (Docker images) to build
   artifacts:
-    - image: ayofalola240/auth
-      context: auth
+    # Auth Service
+    - image: ayofalola240/auth  # Docker image name
+      context: auth             # Directory containing Dockerfile
       sync:
-        manual:
-          - src: src/**/*.ts
-            dest: .
+        manual:                 # File sync configuration for development
+          - src: src/**/*.ts    # TypeScript files to sync
+            dest: .            # Destination in container
       docker:
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile  # Path to Dockerfile
+
+    # Client Application
     - image: ayofalola240/client
       context: client
       sync:
         manual:
-          - src: '**/*.js'
+          - src: '**/*.js'     # JavaScript files to sync
             dest: .
+
+    # Tickets Service
     - image: ayofalola240/tickets
       context: tickets
       sync:
@@ -24,6 +37,8 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+
+    # Orders Service
     - image: ayofalola240/orders
       context: orders
       sync:
@@ -32,6 +47,8 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+
+    # Expiration Service
     - image: ayofalola240/expiration
       context: expiration
       sync:
@@ -40,6 +57,8 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+
+    # Payments Service
     - image: ayofalola240/payments
       context: payments
       sync:
@@ -48,11 +67,34 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+
+  # Local development settings
   local:
-    push: false
+    push: false  # Don't push images to remote registry
+
+# =================
+# Manifests Section
+# =================
 manifests:
   rawYaml:
+    # Kubernetes manifests for production
     - ./infra/k8s/*
+    
+    # Kubernetes manifests for development
     - ./infra/k8s-dev/*
+    
+    # Kubernetes secrets (should be .gitignored)
+    # Note: For production, use sealed secrets or vault instead
+    - ./infra/k8s-secrets/secrets.yaml
+
+# ================
+# Deploy Section
+# ================
 deploy:
-  kubectl: {}
+  kubectl:
+    flags:
+      global: []  # Global kubectl flags (empty in this configuration)
+
+# ==============================================
+# End of Skaffold Configuration
+# ==============================================
